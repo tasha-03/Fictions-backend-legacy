@@ -1,0 +1,90 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        Int        @id @default(autoincrement())
+    login     String     @unique
+    email     String     @unique
+    vkProfile VkProfile?
+
+    worksList Work[]
+}
+
+model VkProfile {
+    id           Int    @id @default(autoincrement())
+    accessToken  String
+    refreshToken String
+    user         User   @relation(fields: [userId], references: [id])
+    userId       Int    @unique
+}
+
+model Work {
+    id       Int      @id @default(autoincrement())
+    title    String
+    author   User     @relation(fields: [authorId], references: [id])
+    authorId Int
+    lang     Language @default(RUSSIAN)
+
+    fandoms Fandom[]
+    tags    Tag[]
+
+    rating   Rating?
+    category Category?
+
+    description String
+
+    published Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    chapters Chapter[]
+}
+
+enum Language {
+    RUSSIAN
+    ENGLISH
+    MANDARIN
+    GERMAN
+    SPANISH
+    ITALIAN
+    FRENCH
+}
+
+enum Rating {
+    GENERAL
+    TEEN
+    MATURE
+    EXPLICIT
+}
+
+enum Category {
+    GEN
+    FM
+    MM
+    FF
+    OTHER
+}
+
+model Fandom {
+    id    Int    @id @default(autoincrement())
+    name  String
+    works Work[]
+}
+
+model Tag {
+    id    Int    @id @default(autoincrement())
+    name  String
+    works Work[]
+}
+
+model Chapter {
+    id        Int      @id @default(autoincrement())
+    work      Work     @relation(fields: [workId], references: [id])
+    workId    Int
+    text      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
