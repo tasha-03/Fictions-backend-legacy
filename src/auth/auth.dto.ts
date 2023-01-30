@@ -11,7 +11,7 @@ export class RegisterDto {
 }
 
 export class UserJwtSignedModel {
-  userId: number;
+  id: number;
   email: string;
   username: string;
   role: string;

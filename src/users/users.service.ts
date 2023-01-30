@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/services/prisma.service';
 import { User, Prisma } from '@prisma/client';
-import { GetUserProfileDto } from './users.dto';
+import { GetUserProfileDto, UsersListParamsQuery } from './users.dto';
 
 @Injectable()
 export class UserService {
@@ -43,12 +43,7 @@ export class UserService {
    * @param params
    * @returns {Promise<GetUserProfileDto[]>} list of users
    */
-  async getUsers(params: {
-    skip?: number;
-    take?: number;
-    where?: Prisma.UserWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
-  }): Promise<GetUserProfileDto[]> {
+  async getUsers(params: UsersListParamsQuery): Promise<GetUserProfileDto[]> {
     const { skip, take, where, orderBy } = params;
     return this.prisma.user.findMany({
       skip,

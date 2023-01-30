@@ -6,7 +6,7 @@ export class GetUserProfileDto {
   username: string;
 }
 
-export class ListParamsQuery {
+export class UsersListParamsQuery {
   skip?: number;
   take?: number;
   where?: Prisma.UserWhereInput;
