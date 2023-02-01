@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
-    private bcryptService: BcryptService
+    private bcryptService: BcryptService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -23,7 +23,7 @@ export class AuthService {
 
   async login(user: ValidateResult) {
     const payload = {
-      userId: user.id,
+      id: user.id,
       email: user.email,
       username: user.username,
       role: user.role,

@@ -50,7 +50,10 @@ export class WorkController {
   async getMyWorks(@Request() req, @Query() query: WorksListParamsQuery) {
     return {
       success: true,
-      data: await this.workService.getUserWorks({ ...query, userId: req.user.id }),
+      data: await this.workService.getUserWorks({
+        ...query,
+        userId: req.user.id,
+      }),
     };
   }
 
