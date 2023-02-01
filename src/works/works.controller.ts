@@ -19,33 +19,44 @@ export class WorkController {
   @Public()
   @Get()
   async getWorksList(@Query() query: WorksListParamsQuery) {
-    return this.workService.getWorks(query);
+    return { success: true, data: await this.workService.getWorks(query) };
   }
 
   @Post()
   async createWork(@Body() body: WorkCreateDto, @Request() req) {
     const { tags, fandoms, ...bodyRest } = body;
-    return this.workService.createWork({
-      ...bodyRest,
-      author: { connect: { email: req.user.email } },
-      tags: {
-        connectOrCreate: tags.map((tag) => ({
-          where: tag.id ? { id: tag.id } : { name: tag.name },
-          create: { name: tag.name },
-        })),
-      },
-      fandoms: {
-        connectOrCreate: fandoms.map((fandom) => ({
-          where: fandom.id ? { id: fandom.id } : { name: fandom.name },
-          create: { name: fandom.name },
-        })),
-      },
-    });
+    return {
+      success: true,
+      data: await this.workService.createWork({
+        ...bodyRest,
+        author: { connect: { email: req.user.email } },
+        tags: {
+          connectOrCreate: tags.map((tag) => ({
+            where: tag.id ? { id: tag.id } : { name: tag.name },
+            create: { name: tag.name },
+          })),
+        },
+        fandoms: {
+          connectOrCreate: fandoms.map((fandom) => ({
+            where: fandom.id ? { id: fandom.id } : { name: fandom.name },
+            create: { name: fandom.name },
+          })),
+        },
+      }),
+    };
+  }
+
+  @Get('myworks')
+  async getMyWorks(@Request() req, @Query() query: WorksListParamsQuery) {
+    return {
+      success: true,
+      data: await this.workService.getUserWorks({ ...query, userId: req.user.id }),
+    };
   }
 
   @Public()
   @Get(':id')
   async getWorkById(@Param('id', ParseIntPipe) id: number) {
-    return this.workService.getWork({ id });
+    return { success: true, data: await this.workService.getWork({ id }) };
   }
 }

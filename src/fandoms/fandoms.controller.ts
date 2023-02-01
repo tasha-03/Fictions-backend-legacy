@@ -1,8 +1,4 @@
-import {
-  Controller,
-  Get,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { Public } from 'src/common/public.decorator';
 import { FandomsListParamsQuery } from './fandoms.dto';
 import { FandomService } from './fandoms.service';
@@ -14,6 +10,6 @@ export class FandomController {
   @Public()
   @Get()
   async getFandomsList(@Query() query: FandomsListParamsQuery) {
-    return this.fandomService.getFandoms(query);
+    return { success: true, data: await this.fandomService.getFandoms(query) };
   }
 }

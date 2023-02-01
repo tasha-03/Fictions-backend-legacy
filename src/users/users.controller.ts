@@ -19,17 +19,23 @@ export class UserController {
   @Get()
   @Roles(Role.Admin)
   async getUsersList(@Query() query: UsersListParamsQuery) {
-    return this.userService.getUsers(query);
+    return { success: true, data: await this.userService.getUsers(query) };
   }
 
   @Get('me')
   async getMe(@Request() req) {
-    return await this.userService.getUserProfile({ email: req.user.email });
+    return {
+      success: true,
+      data: await this.userService.getUserProfile({ email: req.user.email }),
+    };
   }
 
   @Public()
   @Get(':id')
   async getUserById(@Param('id', ParseIntPipe) id: number) {
-    return await this.userService.getUserProfile({ id });
+    return {
+      success: true,
+      data: await this.userService.getUserProfile({ id }),
+    };
   }
 }

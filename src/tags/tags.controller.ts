@@ -10,6 +10,6 @@ export class TagController {
   @Public()
   @Get()
   async getTagsList(@Query() query: TagsListParamsQuery) {
-    return this.tagService.getTags(query);
+    return { success: true, data: await this.tagService.getTags(query) };
   }
 }

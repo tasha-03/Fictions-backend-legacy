@@ -15,6 +15,12 @@ export class WorkService {
       include: {
         tags: true,
         fandoms: true,
+        author: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
       },
     });
   }
@@ -48,6 +54,51 @@ export class WorkService {
         rating: true,
         category: true,
         description: true,
+        createdAt: true,
+        updatedAt: true,
+        author: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        tags: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        fandoms: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getUserWorks(params: {
+    skip?: number;
+    take?: number;
+    where?: Prisma.WorkWhereInput;
+    orderBy?: Prisma.WorkOrderByWithRelationInput;
+    userId: number;
+  }) {
+    const { skip, take, where, orderBy, userId } = params;
+    return this.prisma.work.findMany({
+      skip,
+      take,
+      where: { ...where, authorId: userId },
+      orderBy,
+      select: {
+        id: true,
+        title: true,
+        lang: true,
+        rating: true,
+        category: true,
+        description: true,
+        published: true,
         createdAt: true,
         updatedAt: true,
         author: {
